@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: eventsphere-backend
+    env: node
+    region: oregon
+    plan: free
+    root: backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        fromDatabase:
+          name: mongodb
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: EMAIL_USER
+        sync: false
+      - key: EMAIL_PASS
+        sync: false
+      - key: FRONTEND_URL
+        value: https://eventsphere.vercel.app
+      - key: PORT
+        value: 10000
+
+databases:
+  - name: mongodb
+    databaseCluster: mongodb-atlas
+    ipAllowList: []
