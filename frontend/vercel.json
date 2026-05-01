@@ -3,7 +3,6 @@
   "installCommand": "npm install",
   "framework": "vite",
   "outputDirectory": "dist",
-  "root": "frontend",
   "headers": [
     {
       "source": "/index.html",
