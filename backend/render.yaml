@@ -1,0 +1,56 @@
+# render.yaml - For Monorepo Deployment (Root Directory set to ./backend in Render UI)
+
+# Use this file when:
+# 1. GitHub repo has full EventSphere folder
+# 2. Render "Root Directory" setting = ./backend
+# 3. Build/Start commands work from backend folder root
+
+services:
+  - type: web
+    name: eventsphere-backend
+    env: node
+    region: oregon
+    plan: free
+    
+    # Build & Start Commands (no "cd backend" needed - already in backend folder)
+    buildCommand: npm install
+    startCommand: npm start
+    
+    # Health Check
+    healthCheckPath: /health
+    healthCheckInterval: 30
+    
+    # Environment Variables
+    envVars:
+      - key: NODE_ENV
+        value: production
+        
+      - key: PORT
+        value: 10000
+        
+      # MongoDB Atlas Connection String
+      - key: MONGODB_URI
+        fromDatabase:
+          name: mongodb
+          property: connectionString
+          
+      # JWT Secret - Render will generate this automatically
+      - key: JWT_SECRET
+        generateValue: true
+        
+      # Email Configuration
+      - key: EMAIL_USER
+        sync: false
+        
+      - key: EMAIL_PASS
+        sync: false
+        
+      # Frontend URL for CORS
+      - key: FRONTEND_URL
+        value: https://eventsphere.vercel.app
+
+# Database Configuration
+databases:
+  - name: mongodb
+    databaseCluster: mongodb-atlas
+    ipAllowList: []
